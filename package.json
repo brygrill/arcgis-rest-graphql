@@ -1,0 +1,32 @@
+{
+  "name": "arcgis-server-graphql",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/brygrill/arcgis-server-graphql.git",
+  "author": "Bryan Grill",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "apollo-server": "^2.4.8",
+    "axios": "^0.18.0",
+    "graphql": "^14.1.1",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.15.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "nodemon": "^1.18.10",
+    "prettier": "^1.16.4",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "scripts": {
+    "start": "nodemon index.js",
+    "build": "webpack"
+  }
+}
