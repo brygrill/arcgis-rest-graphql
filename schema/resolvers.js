@@ -1,17 +1,32 @@
-const books = [
-  {
-    title: 'Harry Potter and the Chamber of Secrets',
-    author: 'J.K. Rowling',
-  },
-  {
-    title: 'Jurassic Park',
-    author: 'Michael Crichton',
-  },
-];
+/* eslint-disable no-console */
+const axios = require('axios');
+const { ApolloError } = require('apollo-server');
 
 const resolvers = {
+  Service: {
+    layers() {
+      return 'TODO:';
+    },
+    query() {
+      return 'TODO:';
+    },
+  },
   Query: {
-    books: () => books,
+    async service(_, args) {
+      const { url, token } = args;
+      try {
+        const { data } = await axios.get(url, {
+          params: {
+            token,
+            f: 'json',
+          },
+        });
+        console.log(data);
+        return data;
+      } catch (error) {
+        throw new ApolloError(error);
+      }
+    },
   },
 };
 
