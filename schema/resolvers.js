@@ -12,8 +12,19 @@ const resolvers = {
         throw new ApolloError(error);
       }
     },
-    query() {
-      return 'TODO:';
+    async query(_, { id, where }, { fetch }) {
+      try {
+        const whereClause = where || '1=1';
+        const { data } = await fetch.get(`/${id}/query`, {
+          params: {
+            where: whereClause,
+          },
+        });
+        console.log(data);
+        return data;
+      } catch (error) {
+        throw new ApolloError(error);
+      }
     },
   },
   Query: {

@@ -1,6 +1,10 @@
 const { gql } = require('apollo-server');
 
 const typeDefs = gql`
+  type Results {
+    displayFieldName: String
+  }
+
   type Field {
     name: String
     type: String
@@ -24,7 +28,7 @@ const typeDefs = gql`
     serviceDescription: String
     copyrightText: String
     layers: String
-    query: String
+    query(id: Int!, where: String): Results
     layer(id: Int!): Layer
   }
 
