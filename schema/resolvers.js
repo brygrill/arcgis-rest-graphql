@@ -1,8 +1,15 @@
 /* eslint-disable no-console */
 const { ApolloError } = require('apollo-server');
 const axios = require('axios');
+const GraphQLJSON = require('graphql-type-json');
 
 const resolvers = {
+  JSON: GraphQLJSON,
+  Results: {
+    featureCount(results) {
+      return results.features.length;
+    },
+  },
   Service: {
     async layer(_, { id }, { fetch }) {
       try {
@@ -20,7 +27,6 @@ const resolvers = {
             where: whereClause,
           },
         });
-        console.log(data);
         return data;
       } catch (error) {
         throw new ApolloError(error);

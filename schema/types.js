@@ -1,14 +1,33 @@
 const { gql } = require('apollo-server');
 
 const typeDefs = gql`
-  type Results {
-    displayFieldName: String
-  }
+  scalar JSON
 
   type Field {
     name: String
     type: String
     alias: String
+    length: Int
+  }
+
+  type SR {
+    wkid: Int
+    latestWkid: Int
+  }
+
+  type Feature {
+    attributes: JSON
+    geometry: JSON
+  }
+
+  type Results {
+    displayFieldName: String
+    fieldAliases: JSON
+    geometryType: String
+    spatialReference: SR
+    fields: [Field]
+    features: [Feature]
+    featureCount: Int
   }
 
   # Info for a specific layer by id
