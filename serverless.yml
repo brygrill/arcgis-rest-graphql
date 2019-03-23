@@ -1,0 +1,13 @@
+service: arcgis-graphql
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: v1
+functions:
+  graphql:
+    handler: graphql.graphqlHandler
+    events:
+    - http:
+        path: graphql
+        method: ANY
+        cors: true

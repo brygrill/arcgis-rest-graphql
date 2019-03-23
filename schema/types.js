@@ -53,6 +53,7 @@ const typeDefs = gql`
 
   type Query {
     service(url: String!, token: String): Service
+    # TODO: arcgis REST api
   }
 `;
 
