@@ -1,6 +1,7 @@
 const { gql } = require('apollo-server');
 
 const typeDefs = gql`
+  # ***** Start ArcGIS Server *****
   scalar JSON
 
   type Field {
@@ -30,7 +31,6 @@ const typeDefs = gql`
     featureCount: Int
   }
 
-  # Info for a specific layer by id
   type Layer {
     id: Int
     name: String
@@ -39,7 +39,6 @@ const typeDefs = gql`
     fields: [Field]
   }
 
-  # Root info service
   type Service {
     currentVersion: Float
     mapName: String
@@ -51,9 +50,23 @@ const typeDefs = gql`
     layer(id: Int!): Layer
   }
 
+  # ***** Start AGOL *****
+  type User {
+    username: String
+    id: String
+    fullName: String
+  }
+
+  type AGOL {
+    user(userName: String!): User
+  }
+
+  # ***** Root *****
   type Query {
+    # ArcGIS Server Services
     service(url: String!, token: String): Service
-    # TODO: arcgis REST api
+    # ArcGIS REST API (AGOL or Portal)
+    agol(url: String): AGOL
   }
 `;
 

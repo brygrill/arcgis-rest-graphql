@@ -1,9 +1,18 @@
 /* eslint-disable no-console */
 const { ApolloError } = require('apollo-server');
+const _ = require('lodash');
 const axios = require('axios');
 const GraphQLJSON = require('graphql-type-json');
 
+const resp = data => {
+  if (_.has(data, 'error')) {
+    throw new ApolloError(data.error.message);
+  }
+  return data;
+};
+
 const resolvers = {
+  // ***** Start ArcGIS Server *****
   JSON: GraphQLJSON,
   Results: {
     featureCount(results) {
@@ -11,7 +20,7 @@ const resolvers = {
     },
   },
   Service: {
-    async layer(_, { id }, { fetch }) {
+    async layer(__, { id }, { fetch }) {
       try {
         const { data } = await fetch.get(`/${id}`);
         return data;
@@ -19,7 +28,7 @@ const resolvers = {
         throw new ApolloError(error);
       }
     },
-    async query(_, { id, where }, { fetch }) {
+    async query(__, { id, where }, { fetch }) {
       try {
         const whereClause = where || '1=1';
         const { data } = await fetch.get(`/${id}/query`, {
@@ -33,8 +42,21 @@ const resolvers = {
       }
     },
   },
+  // ***** Start AGOL *****
+  AGOL: {
+    async user(__, { userName }, { fetch }) {
+      try {
+        const { data } = await fetch.get(`/users/${userName}`);
+        console.log(data);
+        return resp(data);
+      } catch (error) {
+        throw new ApolloError(error);
+      }
+    },
+  },
+  // ***** Root *****
   Query: {
-    async service(_, args, ctx) {
+    async service(__, args, ctx) {
       // get args
       const { url, token } = args;
 
@@ -58,6 +80,25 @@ const resolvers = {
       } catch (error) {
         throw new ApolloError(error);
       }
+    },
+    async agol(__, args, ctx) {
+      // get args
+      // const { url, token } = args;
+
+      // set axios instance
+      const fetch = axios.create({
+        baseURL: 'https://www.arcgis.com/sharing/rest/community',
+        timeout: 5000,
+        params: {
+          // token,
+          f: 'json',
+        },
+      });
+
+      // add instance to context
+      ctx.fetch = fetch;
+
+      return { __, args, ctx };
     },
   },
 };
